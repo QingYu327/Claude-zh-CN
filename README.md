@@ -107,6 +107,25 @@ Claude Desktop 要求网关的**模型列表**与**对话**共用一个 base URL
 - API Key 存放在 `.workbuddy/deepseek.key`（已 gitignore），请勿外传。
 - Claude 启动时会对网关做一次健康探测（少量 token 消耗），属正常行为。
 
+### 手动配置（可选，不用工具箱时）
+
+菜单 `[2]` 会原生写入注册表；若想手工写，把下面内容存成 `.reg`（编码选 **UTF-16 LE 或 ANSI**，
+不要用 UTF-8——regedit 读不了），替换 Key 后导入：
+
+```reg
+Windows Registry Editor Version 5.00
+
+[HKEY_CURRENT_USER\SOFTWARE\Policies\Claude]
+"inferenceProvider"="gateway"
+"inferenceGatewayBaseUrl"="http://127.0.0.1:17871"
+"inferenceGatewayApiKey"="PASTE-YOUR-DEEPSEEK-API-KEY-HERE"
+"inferenceGatewayAuthScheme"="bearer"
+"modelDiscoveryEnabled"="true"
+"inferenceModels"="[{\"name\":\"claude-sonnet-4-5\",\"labelOverride\":\"DeepSeek V4 Pro\"},{\"name\":\"claude-haiku-4-5\",\"labelOverride\":\"DeepSeek V4 Flash\"}]"
+```
+
+还原：删除 `HKCU\SOFTWARE\Policies\Claude` 即可（工具箱 `[7]`）。
+
 ## 目录结构
 
 ```
@@ -124,7 +143,7 @@ Claude一键汉化/
 │   ├── deepseek-3p-proxy.py  本地中继
 │   └── translate_i18n.py     i18n 缺词批量机翻（可选，维护用）
 ├── 语言包/                   中文语言包与对照表（payload）
-└── 一键配置/                 .reg 版本配置 + 签名证书
+└── 一键配置/                 签名证书 + 手动配置说明（不含密钥）
 ```
 
 运行数据（断点、日志、密钥）落在 `.workbuddy/`，已被 `.gitignore` 排除。
