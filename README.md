@@ -1,7 +1,7 @@
 # Claude 桌面版一键汉化 · Claude-zh-CN
 
 > 给 **Claude Desktop（Windows / MSIX）** 做简体中文汉化，并支持把它接到 **DeepSeek** 等第三方推理网关。
-> 作者：**睡醒的夜猫子** · 项目名：`Claude-zh-CN`
+> 作者：**睡醒的夜猫子** · 仓库：<https://github.com/QingYu327/Claude-zh-CN>
 
 [![Platform](https://img.shields.io/badge/platform-Windows%2010%2F11-0078D4)](#环境要求)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
