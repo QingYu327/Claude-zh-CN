@@ -1,0 +1,12 @@
+# Windows 批处理保持 CRLF，避免解析问题
+*.cmd text eol=crlf
+
+# 脚本与文档
+*.py  text eol=lf
+*.js  text eol=lf
+*.md  text eol=lf
+
+# 语言包 / 注册表 / 证书按二进制处理，保证字节原样
+语言包/*.json binary
+*.reg binary
+*.cer binary
