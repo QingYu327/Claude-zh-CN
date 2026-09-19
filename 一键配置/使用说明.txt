@@ -1,0 +1,26 @@
+﻿Claude 桌面版 → DeepSeek 配置（3P 推理网关）
+=============================================
+
+【用法】
+1. 双击「Claude-DeepSeek-配置.reg」→ 确认导入
+2. 完全退出 Claude（托盘图标也要退）→ 重新打开
+3. 观察变化：模型选择器 / 设置页 是否出现 DeepSeek 模型
+
+【还原】
+双击「Claude-DeepSeek-还原.reg」→ 重启 Claude
+
+【原理】
+Claude Desktop 支持企业级「第三方推理」配置（官方文档
+claude.com/docs/third-party/claude-desktop/configuration）。
+键写在 HKCU\SOFTWARE\Policies\Claude，属于用户级策略，删除即还原。
+
+  inferenceProvider         = gateway                    启用自定义推理网关
+  inferenceGatewayBaseUrl   = https://api.deepseek.com/anthropic
+  inferenceGatewayApiKey    = <你的 DeepSeek Key>
+  inferenceGatewayAuthScheme= bearer（默认）
+  inferenceModels           = DeepSeek 模型列表（DeepSeek 无模型发现端点，必须手写）
+  modelDiscoveryEnabled     = false
+
+【注意】
+· 本 .reg 含明文 API Key，导入后请勿外传本文件
+· 未验证：Store(MSIX) 版是否接受该策略 —— 若无效，会在换成官方 .exe 版后重试

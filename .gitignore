@@ -1,0 +1,16 @@
+# 运行数据（断点 / 日志 / 密钥）
+.workbuddy/
+*.key
+
+# 备份与临时产物
+backups/
+*.bak
+*.orig.json
+*.log
+
+# Python
+__pycache__/
+*.pyc
+
+# 打包中间产物
+*.msix
