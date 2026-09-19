@@ -1,26 +1,49 @@
 ﻿Claude 桌面版 → DeepSeek 配置（3P 推理网关）
 =============================================
 
-【用法】
-1. 双击「Claude-DeepSeek-配置.reg」→ 确认导入
-2. 完全退出 Claude（托盘图标也要退）→ 重新打开
-3. 观察变化：模型选择器 / 设置页 是否出现 DeepSeek 模型
+【推荐做法】
+直接双击上级目录的「Claude一键汉化.cmd」→ 选 [2] 配置 DeepSeek 网关
+（或用 [4] 一键全装 = 汉化 + 配置 + 启动中继）。
+这一步会原生写入注册表，无需 .reg 文件，也不会把 Key 落进任何可发布文件。
 
-【还原】
-双击「Claude-DeepSeek-还原.reg」→ 重启 Claude
+配好后再启动中继（[3]），然后重启 Claude。
 
 【原理】
-Claude Desktop 支持企业级「第三方推理」配置（官方文档
-claude.com/docs/third-party/claude-desktop/configuration）。
-键写在 HKCU\SOFTWARE\Policies\Claude，属于用户级策略，删除即还原。
+Claude Desktop 支持企业级「第三方推理」配置
+（官方文档 claude.com/docs/third-party/claude-desktop/configuration）。
+键写在 HKCU\SOFTWARE\Policies\Claude，属用户级策略，删除即还原：
 
-  inferenceProvider         = gateway                    启用自定义推理网关
-  inferenceGatewayBaseUrl   = https://api.deepseek.com/anthropic
-  inferenceGatewayApiKey    = <你的 DeepSeek Key>
-  inferenceGatewayAuthScheme= bearer（默认）
-  inferenceModels           = DeepSeek 模型列表（DeepSeek 无模型发现端点，必须手写）
-  modelDiscoveryEnabled     = false
+  inferenceProvider          = gateway
+  inferenceGatewayBaseUrl    = http://127.0.0.1:17871      ← 本地中继地址
+  inferenceGatewayApiKey     = <你的 DeepSeek Key>
+  inferenceGatewayAuthScheme = bearer（默认）
+  modelDiscoveryEnabled      = true
+  inferenceModels            = [{"name":"claude-sonnet-4-5","labelOverride":"DeepSeek V4 Pro"},
+                                {"name":"claude-haiku-4-5","labelOverride":"DeepSeek V4 Flash"}]
+
+为什么 baseUrl 指向本机中继、模型名用 claude-*：
+见发布包 README.md 的「DeepSeek 接入为什么需要本地中继」一节
+（DeepSeek 的模型列表与对话端点前缀不同，且应用要求模型名是 Anthropic 风格）。
+
+【手动导入（可选）】
+如需手工写注册表，把下面内容另存为 .reg 文件（编码选 UTF-16 LE 或 ANSI），
+再把 PASTE-YOUR-DEEPSEEK-API-KEY-HERE 换成自己的 Key，双击导入：
+
+--- 8< ---
+Windows Registry Editor Version 5.00
+
+[HKEY_CURRENT_USER\SOFTWARE\Policies\Claude]
+"inferenceProvider"="gateway"
+"inferenceGatewayBaseUrl"="http://127.0.0.1:17871"
+"inferenceGatewayApiKey"="PASTE-YOUR-DEEPSEEK-API-KEY-HERE"
+"inferenceGatewayAuthScheme"="bearer"
+"modelDiscoveryEnabled"="true"
+"inferenceModels"="[{\"name\":\"claude-sonnet-4-5\",\"labelOverride\":\"DeepSeek V4 Pro\"},{\"name\":\"claude-haiku-4-5\",\"labelOverride\":\"DeepSeek V4 Flash\"}]"
+--- 8< ---
+
+还原：删除该注册表项即可，或用工具箱 [7]。
 
 【注意】
-· 本 .reg 含明文 API Key，导入后请勿外传本文件
-· 未验证：Store(MSIX) 版是否接受该策略 —— 若无效，会在换成官方 .exe 版后重试
+· 本文件与注册表策略含明文 API Key，请勿外传
+· 中继只监听 127.0.0.1，不对外暴露
+· Claude 启动时会对网关做一次健康探测（少量 token 消耗），属正常行为
